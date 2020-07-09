@@ -4,22 +4,23 @@
  * and open the template in the editor.
  */
 package kalkulator;
+import kalkulator.ui.Welcome;
 import java.awt.EventQueue;
+
+
 public class Main {
     public static void main(String[] args) {
-
         //View calculator = new View();
         EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					 Welcome window = new Welcome();
-					window.frame.setVisible(true); //buat nampilin frame ke layar
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-
+            public void run() {
+		try {
+                    Welcome window = new Welcome();
+                    window.frame.setVisible(true); //buat nampilin frame ke layar
+		} catch (Exception e) {
+                    e.printStackTrace();
+		}
+            }
+	});
     }
 }
 

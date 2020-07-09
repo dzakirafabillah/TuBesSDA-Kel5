@@ -1,31 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package kalkulator;
 
 /**
- *
- * @author hp
- */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ *Evaluator class created the binary tree according to the expression given.
+ * Internal nodes hold operators and external nodes hold numbers.
+ * The tree is then traversed to produce a single value result (type double)
+ * @author Luka Kralj
+ * @author Dzakira Rizka
  */
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Evaluator class created the binary tree according to the expression given.
- * Internal nodes hold operators and external nodes hold numbers.
- * The tree is then traversed to produce a single value result (type double).
- *
- * @author Luka Kralj
- * @version 30 March 2018
- */
+
 public class Process {
     public static final char SQRT = 'V';
     public static final char SQUARE = 'S';
@@ -36,14 +22,9 @@ public class Process {
 
     private static final char[] nonNumeric = {'+', '-', '/', '*', '%', '!', '(', ')', SQRT, SQUARE, SIN, COS, TAN, POWER};
     private BinaryTree tree;
-
     private String result;
 
-    /**
-     * Create a new evaluator for the given expression.
-     *
-     * @param expression Expression to be evaluated.
-     */
+    /* Create a new evaluator for the given expression. */
     public Process(String expression) {
         String str = replace(expression);
         str = getValidSubstring(str);
@@ -57,10 +38,9 @@ public class Process {
     }
 
     /**
-     *
      * @return The value of the expression as string, "Err" if there was an error when evaluating.
      */
-    public String getResult() {
+    public String getResult(){
         if (result == null) {
             return "Err";
         }
@@ -143,10 +123,9 @@ public class Process {
                 }
             }
             
-            
             if (c == '(') { bracketCounter++; }
             else if (c == ')') { bracketCounter--; }
-            else if ((c == '+' || (c == '-' && cek == true)) && bracketCounter == 0) {
+            else if ((c == '+' || (c == '-' && cek == false)) && bracketCounter == 0) {
                 indexes.add(i);
             }
         }
@@ -184,7 +163,6 @@ public class Process {
         }
 
         return -1;
-
     }
 
     /**
@@ -238,8 +216,7 @@ public class Process {
      * @param v Root node of the tree (or part of the sub-tree) we want to evaluate.
      * @return Double value of expression represented by the tree (or sub-tree)
      */
-    private double evaluateTree(Node v) {
-        
+    private double evaluateTree(Node v) {     
         if (tree.isNotLeaf(v)) {
             char op = (char)v.getValue();
             if (isOther(op)) {

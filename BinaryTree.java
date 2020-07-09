@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package kalkulator;
 
 /**
- * class Binary Tree yang memiliki field root bertipe Node, sehingga 
- * dapat membuat binary tree yang terdiri dari banyak node
+ * class Binary Tree yang memiliki field root bertipe Node
  * @author DZAKIRA RIZKA
  * @author Luka Kralj
  */
