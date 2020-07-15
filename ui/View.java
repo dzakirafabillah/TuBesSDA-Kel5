@@ -522,13 +522,16 @@ public class View extends KeyAdapter {
  /* Ketika simbol '=' di klik maka operasi matematika akan di proses */
     private void equalsClicked() {  
         String str = inputField.getText();
-        System.out.println(str);
+       // System.out.println("masuk1");
+        //System.out.println(str);
         if (str.equals("")) {
             return;
         }
         /*String dimasukan ke STACK (untuk menampung ekspresi sebelumnya)*/
         previousExpressions.push(str);
+       // System.out.println("masuk2");
         Process proses = new Process(str);
+       // System.out.println("masuk6");
         /*String di proses ke Expression Tree*/
         String result = proses.getResult();
         if (result.startsWith("-")) {
@@ -632,7 +635,7 @@ public class View extends KeyAdapter {
     private boolean canEnterSymbol() {
         String expression = inputField.getText();
         
-        System.out.println(expression);
+        //System.out.println(expression);
         if (expression.equals("")) {
             return false;
         }

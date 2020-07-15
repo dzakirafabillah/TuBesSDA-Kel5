@@ -27,14 +27,19 @@ public class Process {
     /* Create a new evaluator for the given expression. */
     public Process(String expression) {
         String str = replace(expression);
+       // System.out.println("masuk3");
         str = getValidSubstring(str);
+       // System.out.println("masuk4");
         if (getOperator(str) == -1) {
+         //   System.out.println("masuk5");
             result = "" + extractNumber(str);
         }
         else {
+          //  System.out.println("masuk7");
             makeTree(str);
             result = "" + evaluateTree(tree.root());
         }
+        
     }
 
     /**
@@ -105,17 +110,20 @@ public class Process {
      * @return Position of the operator in the given string. -1 if no operator is found.
      */
     private int getOperator(String str) {
+       // System.out.println("tes 1");
         int bracketCounter = 0;
         List<Integer> indexes = new ArrayList<>();
+       // System.out.println("tes 2");
+       // System.out.println(str.length());
         for (int i = 0; i < str.length(); i++) {
+           // System.out.println(i);
             char c = str.charAt(i);
-            
             char d;
             boolean cek = false ;
             if(i != 0){
                d = str.charAt(i-1); 
                for(int j = 0; j < nonNumeric.length-1 ; j++){
-                    if (d == nonNumeric[i]) {
+                    if (d == nonNumeric[j]) {
                        // System.out.println("YES");
                         cek = true;
                         break;
@@ -125,10 +133,11 @@ public class Process {
             
             if (c == '(') { bracketCounter++; }
             else if (c == ')') { bracketCounter--; }
-            else if ((c == '+' || (c == '-' && cek == false)) && bracketCounter == 0) {
+            else if ((c == '+' || (c == '-' && cek == true)) && bracketCounter == 0) {
                 indexes.add(i);
             }
         }
+        //System.out.println("tes 3");
 
         if (indexes.size() > 0) {
             return indexes.get(indexes.size()-1);
