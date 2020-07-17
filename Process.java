@@ -1,31 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package kalkulator;
 
 /**
- *
- * @author hp
- */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ *Evaluator class created the binary tree according to the expression given.
+ * Internal nodes hold operators and external nodes hold numbers.
+ * The tree is then traversed to produce a single value result (type double)
+ * @author Luka Kralj
+ * @author Dzakira Rizka
  */
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Evaluator class created the binary tree according to the expression given.
- * Internal nodes hold operators and external nodes hold numbers.
- * The tree is then traversed to produce a single value result (type double).
- *
- * @author Luka Kralj
- * @version 30 March 2018
- */
+
 public class Process {
     public static final char SQRT = 'V';
     public static final char SQUARE = 'S';
@@ -33,34 +19,34 @@ public class Process {
     public static final char COS = 'C';
     public static final char TAN = 'T';
     public static final char POWER = 'P';
+    public static final char PLUSMIN = 'L';
 
-    private static final char[] nonNumeric = {'+', '-', '/', '*', '%', '!', '(', ')', SQRT, SQUARE, SIN, COS, TAN, POWER};
+    private static final char[] nonNumeric = {'+', '-', '/', '*', '%', '!', '(', ')', SQRT, SQUARE, SIN, COS, TAN, POWER, PLUSMIN};
     private BinaryTree tree;
-
     private String result;
 
-    /**
-     * Create a new evaluator for the given expression.
-     *
-     * @param expression Expression to be evaluated.
-     */
+    /* Create a new evaluator for the given expression. */
     public Process(String expression) {
         String str = replace(expression);
+       // System.out.println("masuk3");
         str = getValidSubstring(str);
+       // System.out.println("masuk4");
         if (getOperator(str) == -1) {
+         //   System.out.println("masuk5");
             result = "" + extractNumber(str);
         }
         else {
+          //  System.out.println("masuk7");
             makeTree(str);
             result = "" + evaluateTree(tree.root());
         }
+        
     }
 
     /**
-     *
      * @return The value of the expression as string, "Err" if there was an error when evaluating.
      */
-    public String getResult() {
+    public String getResult(){
         if (result == null) {
             return "Err";
         }
@@ -98,7 +84,7 @@ public class Process {
             if (isOther(c)) {
                 // If the operator is a other operator the node will only have one child.
                 String newExpression = "";
-                if (c == SQRT || c == SIN || c == COS || c == TAN) {
+                if (c == SQRT || c == SIN || c == COS || c == TAN || c == PLUSMIN) {
                     newExpression = expression.substring(index + 1, expression.length());
                 }
                 else {
@@ -125,17 +111,20 @@ public class Process {
      * @return Position of the operator in the given string. -1 if no operator is found.
      */
     private int getOperator(String str) {
+       // System.out.println("tes 1");
         int bracketCounter = 0;
         List<Integer> indexes = new ArrayList<>();
+       // System.out.println("tes 2");
+       // System.out.println(str.length());
         for (int i = 0; i < str.length(); i++) {
+           // System.out.println(i);
             char c = str.charAt(i);
-            
             char d;
             boolean cek = false ;
             if(i != 0){
                d = str.charAt(i-1); 
                for(int j = 0; j < nonNumeric.length-1 ; j++){
-                    if (d == nonNumeric[i]) {
+                    if (d == nonNumeric[j]) {
                        // System.out.println("YES");
                         cek = true;
                         break;
@@ -143,13 +132,13 @@ public class Process {
                 }
             }
             
-            
             if (c == '(') { bracketCounter++; }
             else if (c == ')') { bracketCounter--; }
             else if ((c == '+' || (c == '-' && cek == true)) && bracketCounter == 0) {
                 indexes.add(i);
             }
         }
+        //System.out.println("tes 3");
 
         if (indexes.size() > 0) {
             return indexes.get(indexes.size()-1);
@@ -184,7 +173,6 @@ public class Process {
         }
 
         return -1;
-
     }
 
     /**
@@ -195,7 +183,7 @@ public class Process {
     private boolean isOther(char operator) {
         return operator == '!' || operator == '%' || operator == SQRT || 
                 operator == SQUARE || operator == SIN || operator == COS || 
-                operator == TAN;
+                operator == TAN || operator == PLUSMIN;
     }
 
     /**
@@ -216,7 +204,7 @@ public class Process {
             char c = expression.charAt(index);
             if (isOther(c)) {
                 String newExpression = "";
-                if (c == SQRT || c == SIN || c == COS || c == TAN) {
+                if (c == SQRT || c == SIN || c == COS || c == TAN || c == PLUSMIN) {
                     newExpression = expression.substring(index + 1, expression.length());
                 }
                 else {
@@ -238,8 +226,7 @@ public class Process {
      * @param v Root node of the tree (or part of the sub-tree) we want to evaluate.
      * @return Double value of expression represented by the tree (or sub-tree)
      */
-    private double evaluateTree(Node v) {
-        
+    private double evaluateTree(Node v) {     
         if (tree.isNotLeaf(v)) {
             char op = (char)v.getValue();
             if (isOther(op)) {
@@ -265,6 +252,10 @@ public class Process {
                 }
                 else if (op == TAN) {
                     return Math.tan(Math.toRadians(evaluateTree(v.getLeftChild())));
+                }
+                else if(op == PLUSMIN) {
+                    double i = evaluateTree(v.getLeftChild());
+                    return i*-1;
                 }
             }
             else {
@@ -302,6 +293,7 @@ public class Process {
         str = str.replaceAll("sin", SIN + "");
         str = str.replaceAll("cos", COS + "");
         str = str.replaceAll("tan", TAN + "");
+        str = str.replaceAll("(-)", "" + PLUSMIN);
         StringBuffer newStr = new StringBuffer();
         for (int i = 0; i < str.length(); i++) {
             if (str.charAt(i) == '^' ) {

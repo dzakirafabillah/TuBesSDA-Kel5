@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package kalkulator;
+package kalkulator.ui;
 
+import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -12,9 +8,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Stack;
 import java.lang.Integer;
-
+import kalkulator.Process;
 /* Java swing untuk membuat window */
-
 
 // TODO: add checking validity of the expression when clicking equals
 // TODO: fix entering with keyboard
@@ -26,6 +21,7 @@ import java.lang.Integer;
  * @author DZAKIRA RIZKA
  * @author Luka Kralj
  */
+
 public class View extends KeyAdapter {
 
     /*Panjang Lebar Button*/
@@ -35,13 +31,12 @@ public class View extends KeyAdapter {
 
     //private static final char[] validChars = {0,1,2,3,4,5,6,7,8,9,'(',')','+','-','*','/', '%', Evaluator.SQUARE, Evaluator.SQRT};
 
-    private JTextArea displayArea; // Results shown here.
-    private JTextField inputField; // Expressions entered here.
-    // on entering '(' increase by 1, on entering ')' decrease by 1; check if 0 before adding.
-    // for expression to be valid, counter must equal 0
+    private JTextArea displayArea; // Results ditampilkan disini
+    private JTextField inputField; // Ekspresi matematika ditulis disini
+    /* on entering '(' increase by 1, on entering ')' decrease by 1; check if 0 before adding.
+     for expression to be valid, counter must equal 0*/
     private int bracketCounter;
-    //  if a decimal point has just been entered we cannot enter it again until we reach the next operator
-    private boolean decimalPointEntered;
+    private boolean decimalPointEntered; //kalau udah ada tanda '.' buat decimal, gabisa di klik sebelum ada operator
     // used for undo; stores previous entries
     private Stack<String> previousExpressions;
 
@@ -54,7 +49,6 @@ public class View extends KeyAdapter {
         previousExpressions = new Stack<>();
 
         JFrame frame = new JFrame("DR. Calculator");
-        //frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         
         /*Container yang mewadahi semuanya*/
         Container contentPane = frame.getContentPane();
@@ -62,19 +56,18 @@ public class View extends KeyAdapter {
         /* Panel itu semacam box */
         JPanel all = new JPanel();
         all.setLayout(new BoxLayout(all, BoxLayout.PAGE_AXIS));
-        all.setBorder(new EmptyBorder(5, 5, 5, 5)); // 7 itu ukuran margin
-        //all.setBackground(Color.BLACK);
+        all.setBorder(new EmptyBorder(5, 5, 5, 5)); // 5 itu ukuran margin
 
         JPanel labels = new JPanel(new BorderLayout());
-       // labels.setBorder(new LineBorder(Color.GRAY, 1));
-
+        
+        /*Untuk menampilkan hasil*/
         displayArea = new JTextArea();
         displayArea.setOpaque(true);
         displayArea.setBackground(Color.WHITE);
         displayArea.setLineWrap(false);
         displayArea.setEditable(false);
 
-        /*SROLL*/
+        /*SCROLL*/
         JScrollPane display = new JScrollPane(displayArea);
         display.setPreferredSize(new Dimension(frame.getWidth(), 100));
         display.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -91,11 +84,10 @@ public class View extends KeyAdapter {
 
         all.add(Box.createVerticalStrut(10)); // buat jaraknya
         all.add(labels);
-        all.add(Box.createVerticalStrut(10)); // buat jaraknya
+        all.add(Box.createVerticalStrut(10)); 
 
         JPanel buttons = createButtons();
         all.add(buttons);
-        
         
         contentPane.add(all);
         all.setBackground(new Color(204,229,255));
@@ -112,11 +104,9 @@ public class View extends KeyAdapter {
 
     /**
      * BUTTON untuk input
-     *
-     * @return Panel with all the buttons to be added to the calculator.
+     * @return Panel yang berisi semua button
      */
     private JPanel createButtons() {
-
         JPanel allFlow = new JPanel(new FlowLayout());
         JPanel allAll = new JPanel();
         allAll.setLayout(new BoxLayout(allAll, BoxLayout.LINE_AXIS));
@@ -124,18 +114,15 @@ public class View extends KeyAdapter {
         JPanel all = new JPanel();
         all.setLayout(new BoxLayout(all, BoxLayout.PAGE_AXIS));
 
-
         JPanel topButtons = new JPanel();
-        /*GridLayout(int rows, int columns, int hgap, int vgap)*/
-        topButtons.setLayout(new GridLayout(4,6,2,2));
+        topButtons.setLayout(new GridLayout(5,6,2,2));
         
 
-        //FIRST FISRT ROW
+        /*First Row*/
         
          JButton sin = new JButton("sin");
         sin.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
         sin.setBackground(Color.BLACK);
-        //sin.addActionListener(e -> updateInputField("sin("));
         sin.addActionListener(e -> trigonometryClicked("sin"));
         sin.setForeground(Color.WHITE);
         topButtons.add(sin);
@@ -153,27 +140,6 @@ public class View extends KeyAdapter {
         tan.addActionListener(e -> trigonometryClicked("tan"));
         tan.setForeground(Color.WHITE);
         topButtons.add(tan);
-//        JButton plus = new JButton("+");
-//        plus.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-//        plus.setBackground(Color.BLACK);
-//        plus.addActionListener(e -> operatorClicked("+"));
-//        plus.setForeground(Color.WHITE);
-//        topButtons.add(plus);
-//        
-//        JButton minus = new JButton("-");
-//        minus.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-//        minus.setBackground(Color.BLACK);
-//        minus.addActionListener(e -> operatorClicked("-"));
-//        //minus.addActionListener(e -> updateInputField("-"));
-//        minus.setForeground(Color.WHITE);
-//        topButtons.add(minus);
-//        
-//        JButton multiply = new JButton("*");
-//        multiply.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-//        multiply.setBackground(Color.BLACK);
-//        multiply.addActionListener(e -> operatorClicked("*"));
-//        multiply.setForeground(Color.WHITE);
-//        topButtons.add(multiply);
         
         JButton clear = new JButton("C");
         clear.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
@@ -182,12 +148,6 @@ public class View extends KeyAdapter {
         clear.setForeground(Color.BLACK);
         topButtons.add(clear);
         
-//        JButton divide = new JButton("/");
-//        divide.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-//        divide.setBackground(Color.BLACK);
-//        divide.addActionListener(e -> operatorClicked("/"));
-//        divide.setForeground(Color.WHITE);
-//        topButtons.add(divide);
         
         JButton undo = new JButton();
         undo.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
@@ -208,7 +168,7 @@ public class View extends KeyAdapter {
         topButtons.add(delete);
         
         
-        // FIRST ROW:
+        /*Second Row*/
 
         JButton seven = new JButton("7");
         seven.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
@@ -231,7 +191,7 @@ public class View extends KeyAdapter {
         nine.setForeground(Color.WHITE);
         topButtons.add(nine);
         
-         JButton plus = new JButton("+");
+        JButton plus = new JButton("+");
         plus.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
         plus.setBackground(Color.BLACK);
         plus.addActionListener(e -> operatorClicked("+"));
@@ -242,7 +202,6 @@ public class View extends KeyAdapter {
         minus.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
         minus.setBackground(Color.BLACK);
         minus.addActionListener(e -> operatorClicked("-"));
-        //minus.addActionListener(e -> updateInputField("-"));
         minus.setForeground(Color.WHITE);
         topButtons.add(minus);
         
@@ -254,7 +213,7 @@ public class View extends KeyAdapter {
         topButtons.add(multiply);
 
 
-        // SECOND ROW:
+        /*Third Row*/
 
         JButton four = new JButton("4");
         four.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
@@ -298,14 +257,8 @@ public class View extends KeyAdapter {
         divide.setForeground(Color.WHITE);
         topButtons.add(divide);
         
-//        JButton factorial = new JButton("!");
-//        factorial.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-//        factorial.setBackground(Color.BLACK);
-//        factorial.addActionListener(e -> factorialClicked());
-//        factorial.setForeground(Color.WHITE);
-//        topButtons.add(factorial);
 
-        // THIRD ROW:
+        /*Fourth Row*/
 
         JButton one = new JButton("1");
         one.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
@@ -341,6 +294,8 @@ public class View extends KeyAdapter {
         powers.addActionListener(e -> operatorClicked("p"));
         powers.setForeground(Color.WHITE);
         topButtons.add(powers);
+        
+       
 
         JButton sqrt = new JButton("√");
         sqrt.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
@@ -351,12 +306,13 @@ public class View extends KeyAdapter {
 
         all.add(topButtons);
 
-
+        /*Fifth Row*/
+        
         JPanel bottomRow = new JPanel();
         bottomRow.setLayout(new FlowLayout());
 
         JPanel buttons = new JPanel();
-        buttons.setLayout(new GridLayout(1,9,2,1));
+        buttons.setLayout(new GridLayout(1,6,2,2));
 
         
         JButton decimalPoint = new JButton(".");
@@ -364,7 +320,7 @@ public class View extends KeyAdapter {
         decimalPoint.setBackground(Color.BLACK);
         decimalPoint.addActionListener(e -> decimalPointClicked());
         decimalPoint.setForeground(Color.WHITE);
-        buttons.add(decimalPoint);
+        topButtons.add(decimalPoint);
         
         
         JButton zero = new JButton("0");
@@ -372,32 +328,60 @@ public class View extends KeyAdapter {
         zero.setBackground(Color.GRAY);
         zero.addActionListener(e -> updateInputField("0"));
         zero.setForeground(Color.WHITE);
-        buttons.add(zero);
+        topButtons.add(zero);
 
         JButton percent = new JButton("%");
         percent.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
         percent.setBackground(Color.BLACK);
         percent.addActionListener(e -> percentClicked());
         percent.setForeground(Color.WHITE);
-        buttons.add(percent);
+        topButtons.add(percent);
 
         JButton factorial = new JButton("!");
         factorial.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
         factorial.setBackground(Color.BLACK);
         factorial.addActionListener(e -> factorialClicked());
         factorial.setForeground(Color.WHITE);
-        buttons.add(factorial);
-
-        bottomRow.add(buttons);
-
+        topButtons.add(factorial);
+      
+        JButton plusmin = new JButton("+/-");
+        plusmin.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
+        plusmin.setBackground(Color.BLACK);
+        plusmin.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+                              //  String plusminus = inputField.getText(); 
+                                String str = inputField.getText();
+                            //    for (int i = 0; i < str.length(); i++){
+                              //   char c = str.charAt(i);
+                               // if(str == " "){
+				double plsmin= Double.parseDouble(str);
+				plsmin=plsmin*(-1);
+                                inputField.setText("");
+                                updateInputField(String.valueOf(plsmin));
+                             // }else if(c == "("){
+                               //   updateInputField(str.charAt(BUTTON_WIDTH))
+                             // }
+                              //  }
+			}
+		});
+       // plusmin.addActionListener(e -> plusminClicked());
+        plusmin.setForeground(Color.WHITE);
+        topButtons.add(plusmin);
+        
+        // topButtons.add(buttons);
         JButton equals = new JButton("=");
-        equals.setPreferredSize(new Dimension(BUTTON_WIDTH2, BUTTON_HEIGHT));
+        equals.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
         equals.setBackground(new Color(190, 34, 34));
         equals.addActionListener(e -> equalsClicked());
         equals.setForeground(Color.WHITE);
-        bottomRow.add(equals);
+       topButtons.add(equals);
 
-        all.add(bottomRow);
+        all.add(topButtons);
+        
+        
+        /*Sixth Row*/
         
         JPanel bottomRow2 = new JPanel();
         bottomRow.setLayout(new FlowLayout());
@@ -440,26 +424,36 @@ public class View extends KeyAdapter {
         return allFlow;
     }
     
-    
-    /*BARU SAMPE SINI*/
 
-    /* Clear input yangg dimasukan */
+    /* Clear input yang dimasukan */
     private void clearInputField(){
         inputField.setText("");
         enableDecimalPoint();
     }
 
-    /* Menambahkan oerator/operand ke ekspresi matematika (newCharacter) */
+    /* Menambahkan operand ke ekspresi matematika (newCharacter) */
     private void updateInputField(String newCharacter) {
         inputField.setText(inputField.getText() + newCharacter);
     }
+    
+    /* Menambahkan operator ke dalam ekspresi mtk */
+    private void operatorClicked(String newCharacter) {
+        if(canEnterSymbol()) {
+            //System.out.println("masuk1");
+            updateInputField(newCharacter);
+            enableDecimalPoint();
+        }
+        else if (newCharacter.equals("-") && (inputField.getText().equals("") || inputField.getText().charAt(inputField.getText().length()-1) == '(')) {
+            // System.out.println("masuk2");
+            updateInputField("-");
+            enableDecimalPoint();
+        }
+        else {
+            showWarning();
+        }
+    }
 
-    /**
-     * Menambahkan hasil setelah ekspresi matematika
-     *
-     * @param expression Expression to be added.
-     * @param result Result of the expression.
-     */
+    /* Menampilkan operasi matematika beserta hasilnya di Text area */
     private void updateDisplayField(String expression, String result) {
         displayArea.append(expression + "\n= " + result + "\n\n");
     }
@@ -476,7 +470,6 @@ public class View extends KeyAdapter {
 
      /* Menghapus 1 karakter ekspresi matematika */
     private void deleteClicked() {
-        // Delete the last character.
         String str = inputField.getText();
         if (!str.equals("")) {
             inputField.setText(str.substring(0, str.length() - 1));
@@ -493,7 +486,6 @@ public class View extends KeyAdapter {
         }
     }
     
-    
     /* Ketika klik 'akar' */
     private void sqrtClicked() {
         if (!canEnterSymbol()) {
@@ -504,10 +496,30 @@ public class View extends KeyAdapter {
             showWarning();
         }
     }
+    
+    /* Ketika klik '+/-'*/
+    private void plusminClicked() {
+        if(!canEnterSymbol()) {
+           /* String str = inputField.getText();
+            double plsmin= Double.parseDouble(inputField.getText());
+            plsmin=plsmin*(-1);
+            inputField.setText("");
+            updateInputField(String.valueOf(plsmin));
+         //   double plusmin = Double.parseDouble(inputField.getText());
+          //  plusmin = plusmin*-1;
+           // inputField.setText("");
+          //  updateInputField(String.valueOf(plusmin));*/
+          inputField.setText(inputField.getText() + "(-)");
+            bracketCounter++;
+        }
+        else {
+            showWarning();
+        }
+    }
 
     /**
      * Tanda titik (untuk desimal) di klik.
-     * It is added to the expression if and only if the expression would still be valid.
+     * Hanya di tambahkan ketika valid
      */
     private void decimalPointClicked() {
         char last = ' '; // placeholder
@@ -558,12 +570,17 @@ public class View extends KeyAdapter {
  /* Ketika simbol '=' di klik maka operasi matematika akan di proses */
     private void equalsClicked() {  
         String str = inputField.getText();
-        System.out.println(str);
+       // System.out.println("masuk1");
+        //System.out.println(str);
         if (str.equals("")) {
             return;
         }
+        /*String dimasukan ke STACK (untuk menampung ekspresi sebelumnya)*/
         previousExpressions.push(str);
+       // System.out.println("masuk2");
         Process proses = new Process(str);
+       // System.out.println("masuk6");
+        /*String di proses ke Expression Tree*/
         String result = proses.getResult();
         if (result.startsWith("-")) {
             result = result ;
@@ -582,8 +599,10 @@ public class View extends KeyAdapter {
         if (str.equals("")) {
             return;
         }
+        /*String dimasukan ke STACK (untuk menampung ekspresi sebelumnya)*/
         previousExpressions.push(str);
         Process proses = new Process(str);
+        /*String di proses ke Expression Tree*/
         String result = proses.getResult();
         String hasil = null;
         
@@ -609,29 +628,8 @@ public class View extends KeyAdapter {
         updateInputField(result);
 
     }
-
-    /**
-     * Menambahkan operator ke dalam ekspresi mtk
-     *
-     * @param newCharacter Operator to add.
-     */
-    private void operatorClicked(String newCharacter) {
-        if(canEnterSymbol()) {
-            //System.out.println("masuk1");
-            updateInputField(newCharacter);
-            enableDecimalPoint();
-        }
-        else if (newCharacter.equals("-") && (inputField.getText().equals("") || inputField.getText().charAt(inputField.getText().length()-1) == '(')) {
-            // System.out.println("masuk2");
-            updateInputField("-");
-            enableDecimalPoint();
-        }
-        else {
-            showWarning();
-        }
-    }
     
-    
+    /*Menggunakan sin cos tan*/
     private void trigonometryClicked(String newCharacter){ 
         if (!canEnterSymbol()) {
             inputField.setText(inputField.getText() + newCharacter  + "(");
@@ -685,7 +683,7 @@ public class View extends KeyAdapter {
     private boolean canEnterSymbol() {
         String expression = inputField.getText();
         
-        System.out.println(expression);
+        //System.out.println(expression);
         if (expression.equals("")) {
             return false;
         }
@@ -701,88 +699,6 @@ public class View extends KeyAdapter {
     /* Ketika operator/operand tidak valid */
     private void showWarning() {
         JOptionPane.showMessageDialog(null, "Invalid operation.", "Invalid operator/operand.", JOptionPane.WARNING_MESSAGE);
-    }
-
-    /**
-     * This method is intended to accept inputs entered with the keyboard.
-     * There is still quite a lot of problems with it. It seems that the key codes are not matching with the constants.
-     * Also the focus is lost once the user clicks one of the buttons.
-     *
-     * TODO: debug
-     * @param e
-     */
-    @Override
-    public void keyTyped(KeyEvent e) {
-        char c = e.getKeyChar();
-        if (c == '+' ||
-                c == '-' ||
-                c == '*' ||
-                c == '/' ||
-                c == 'p'){
-            operatorClicked("" + c);
-        }
-        else if (c == 's' ||
-                    c == 'c' ||
-                    c == 't' ){
-            trigonometryClicked(c + "");
-        }
-        else if (e.getKeyCode() == KeyEvent.VK_DELETE) {
-            clearInputField();
-        }
-        else if (e.getKeyCode() == KeyEvent.VK_DECIMAL || c == '.') {
-            decimalPointClicked();
-        }
-        else if (c == KeyEvent.VK_UNDO) {
-            undoClicked();
-        }
-        else if (c == KeyEvent.VK_V) {
-            sqrtClicked();
-        }
-//        else if (e.getKeyChar() == Evaluator.SQUARE) {
-//            squareClicked();
-//        }
-        else if (c == KeyEvent.VK_LEFT_PARENTHESIS) {
-            openingBracketClicked();
-        }
-        else if (c == KeyEvent.VK_RIGHT_PARENTHESIS) {
-            closingBracketClicked();
-        }
-        else if (c == KeyEvent.VK_ENTER) {
-            equalsClicked();
-        }
-        else if (e.getKeyChar() == '%') {
-            percentClicked();
-        }
-        else if (e.getKeyChar() == '!') {
-            factorialClicked();
-        }
-        else if (c == KeyEvent.VK_0 ||
-                c == KeyEvent.VK_1 ||
-                c == KeyEvent.VK_2 ||
-                c == KeyEvent.VK_3 ||
-                c == KeyEvent.VK_4 ||
-                c == KeyEvent.VK_5 ||
-                c == KeyEvent.VK_6 ||
-                c == KeyEvent.VK_7 ||
-                c == KeyEvent.VK_8 ||
-                c == KeyEvent.VK_9 ||
-                c == KeyEvent.VK_NUMPAD0 ||
-                c == KeyEvent.VK_NUMPAD1 ||
-                c == KeyEvent.VK_NUMPAD2 ||
-                c == KeyEvent.VK_NUMPAD3 ||
-                c == KeyEvent.VK_NUMPAD4 ||
-                c == KeyEvent.VK_NUMPAD5 ||
-                c == KeyEvent.VK_NUMPAD6 ||
-                c == KeyEvent.VK_NUMPAD7 ||
-                c == KeyEvent.VK_NUMPAD8 ||
-                c == KeyEvent.VK_NUMPAD9) {
-            updateInputField("" + e.getKeyChar());
-        }
-        else {
-            // Do nothing.
-        }
-    
-
     }
 
 }
