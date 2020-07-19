@@ -10,18 +10,9 @@ import java.awt.EventQueue;
 
 public class Main {
     public static void main(String[] args) {
-        
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-		try {
-                    Welcome window = new Welcome();
-                    window.frame.setVisible(true); //buat nampilin frame ke layar
-		} catch (Exception e) {
-                    e.printStackTrace();
-		}
-            }
-            
-	});
+     	
+           Welcome window = new Welcome();
+           window.frame.setVisible(true); //buat nampilin frame ke layar
     }
 }
 
