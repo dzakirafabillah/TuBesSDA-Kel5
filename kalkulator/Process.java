@@ -14,7 +14,6 @@ import java.util.List;
 
 public class Process {
     public static final char SQRT = 'V';
-    public static final char SQUARE = 'S';
     public static final char SIN = 'N';
     public static final char COS = 'C';
     public static final char TAN = 'T';
@@ -216,10 +215,6 @@ public class Process {
             if (isOther(op)) {
                 if (op == SQRT) {
                     return Math.sqrt(evaluateTree(v.getLeftChild()));
-                }
-                else if (op == SQUARE) {
-                    double i = evaluateTree(v.getLeftChild());
-                    return i*i;
                 }
                 else if (op == '%') {
                     return evaluateTree(v.getLeftChild())/100;
