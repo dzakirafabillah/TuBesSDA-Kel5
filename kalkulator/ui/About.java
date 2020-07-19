@@ -34,13 +34,13 @@ public class About {
 	/*Isi*/
 	private void content() {
 		frame = new JFrame("DR. Calculator");
-		frame.setBounds(100, 100, 487, 634);
+		frame.setBounds(0, 0, 480, 408);
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(204,229,255));
-		panel.setBounds(0, 0, 471, 69);
+		panel.setBounds(0, 0, 480, 408);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
                 
@@ -69,29 +69,29 @@ public class About {
 		/*Bagian bawah : isi*/
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(SystemColor.menu);
-		panel_1.setBounds(0, 70, 471, 526);
+		panel_1.setBounds(0, 0, 400, 326);
 		frame.getContentPane().add(panel_1);
 		panel_1.setLayout(null);
 		
 		JLabel nama1 = new JLabel("Dzakira Fabillah");
 		nama1.setFont(new Font("Century Gothic", Font.BOLD, 19));
 		nama1.setBounds(120, 50, 153, 159);
-		panel_1.add(nama1);
+		panel.add(nama1);
                
                 JLabel NIM1 = new JLabel("191524040");
 		NIM1.setFont(new Font("Century Gothic", Font.BOLD, 19));
-		NIM1.setBounds(120, 70, 190, 159);
-		panel_1.add(NIM1);
+		NIM1.setBounds(120, 80, 200, 159);
+		panel.add(NIM1);
                 
                 JLabel nama2 = new JLabel("Rizka Auliarahmi");
 		nama2.setFont(new Font("Century Gothic", Font.BOLD, 19));
-		nama2.setBounds(119, 318, 199, 32);
-		panel_1.add(nama2);
+		nama2.setBounds(119, 208, 199, 32);
+		panel.add(nama2);
                 
                 JLabel NIM2 = new JLabel("191524057");
 		NIM2.setFont(new Font("Century Gothic", Font.BOLD, 19));
-		NIM2.setBounds(119, 338, 199, 32);
-		panel_1.add(NIM2);
+		NIM2.setBounds(119, 238, 199, 32);
+		panel.add(NIM2);
                       
 	}
 }
