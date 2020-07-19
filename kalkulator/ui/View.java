@@ -706,7 +706,7 @@ public class View extends KeyAdapter {
 
         char last = expression.charAt(expression.length()-1);
         if (last == '+' || last == '-' || last == '/' || last == '*' || 
-                last == '(' || last=='p') {
+                last == '(' || last=='^') {
             updateInputField("(");
             bracketCounter++;
             enableDecimalPoint();
