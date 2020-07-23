@@ -26,7 +26,11 @@ public class Process {
     private BinaryTree tree;
     private String result;
 
-    /* Create a new evaluator for the given expression. */
+   / * membuat proses baru dari ekspresi matematika yang diinputkan.
+     * simbol trigonometri, '%', '~', '^', log, ln, dan exp akan diganti sesuai konstanta pada kelas process.
+     * tanda kurung pada ekspresi matematika akan dihapus.
+     * ekpresi matematika yang berupa string akan dikonversi menjadi double sebelum dikalkulasi 
+     */
     public Process(String expression) {
         String str = replace(expression);
         str = getValidSubstring(str);
@@ -40,8 +44,9 @@ public class Process {
         
     }
 
-    /**
-     * @return The value of the expression as string, "Err" if there was an error when evaluating.
+    /** 
+     * Mengembalikan value dari ekspresi matematika sebagai string.
+     * Mengembalikan "Err" jika ada error saat memproses ekspersi matematika.
      */
     public String getResult(){
         if (result == null) {
@@ -169,15 +174,16 @@ public class Process {
     }
 
     /**
-     * Creates a new node to be added to the tree. Children of each node are created recursively
-     * to produce the full tree.
+     * Membuat node baru untuk dimasukkan kedalam tree. Anak dari setiap node dibuat dengan cara rekursif
+     * untuk membentuk full tree
      *
-     * @param expression Expression for which we need to produce a sub-tree for.
-     * @return Root node of the sub-tree.
+     * @param expression adalah Ekspresi matematika yang akan di generate menjadi binary tree
+     * @return root dari substree
      */
     private Node getNewChild(String expression) {
         expression = getValidSubstring(expression);
         int index = getOperator(expression);
+        /*Apabila tidak terdapat operator*/
         if (index == -1) {
             double value = extractNumber(expression);
             return new Node(value, null, null);
@@ -204,14 +210,16 @@ public class Process {
     }
 
     /**
-     * Evaluates a binary tree with the root node v. The method works recursively.
+     * Menghitung operasi matematika bedasarkan tree yang root nya adalah v. Method akan berjalan rekursif.
      *
-     * @param v Root node of the tree (or part of the sub-tree) we want to evaluate.
-     * @return Double value of expression represented by the tree (or sub-tree)
+     * Penghtiungan dilakukan secara preorder (dari parent ke anak kiri dan kanan)
+     * @param v adalah root dari tree/parent dari substree yang akan kita hitung hasilnya.
+     * @return hasil operasi matematika dari expression binary tree dengan tipe double
      */
     private double evaluateTree(Node v) {     
         if (tree.isNotLeaf(v)) {
             char op = (char)v.getValue();
+            /*Jika Unary Operator, hanya memiliki 1 anak*/
             if (isOther(op)) {
                 if (op == SQRT) {
                     return Math.sqrt(evaluateTree(v.getLeftChild()));
@@ -248,6 +256,7 @@ public class Process {
                 }
                 
             }
+            /*Jika Binary operator, memiliki 2 anak.*/
             else {
                 if (op == '+') {
                     return evaluateTree(v.getLeftChild()) + evaluateTree(v.getRightChild());
@@ -272,11 +281,10 @@ public class Process {
     }
 
     /**
-     * Called at the beginning to replace user-friendly representation of square root ("sqrt") and square ("^2")
-     * with only one character to represent the same operation in the evaluation process.
+     * Beberapa operator di replace dengan konstanta agar lebih mudah dibaca
      *
-     * @param str Initial string as entered by the user.
-     * @return Valid string that works with the evaluator.
+     * @param str adalah Initial State dari String, berisikan ekspresi matematika.
+     * @return String yang sudah valid.
      */
     private String replace(String str){
         if(str.charAt(0)=='-'){
@@ -295,11 +303,11 @@ public class Process {
     }
 
     /**
-     * Removes the leading and ending brackets, for example:
-     * If input is (((1 + (2 - 3)))), then the outputted expression will be 1 + (2 - 3).
+     * Menghapus tanda buka kurung dan tutup kurung
+     * Misalnya input adalah (((1 + (2 - 3)))), maka output expression nya 1 + (2 - 3).
      *
-     * @param str Expression to validate.
-     * @return Valid substring of the inputted expression.
+     * @param str yaitu ekspresi matematika yang akan di validasi
+     * @return string yang valid untuk di lakukan operasi matematika.
      */
     private String getValidSubstring(String str) {
         while (str.charAt(0) == '(' && str.charAt(str.length() -1) == ')') {
@@ -308,6 +316,10 @@ public class Process {
         return str;
     }
     
+    /*Method untuk menghitung nilai faktorial
+    * @param num adalah integer yang akan di hitung nilai faktorialnya
+    * Method bekerja secara rekursif
+    */
     static int faktorial(int num) {
         if(num == 0){
             return 1;
