@@ -56,10 +56,9 @@ public class Process {
     }
 
     /**
-     * Extracts the number from the string. The string can be in format of ((34.5)) for example.
-     *
-     * @param str String with the numerical value. It can include brackets.
-     * @return Value parsed from the string as double.
+     * mengonversi dari angka yang bertipe data string menjadi double
+     * jika string berformat misalnya, ((34.5)). tanda kurung akan diganti oleh spasi.
+     * spasi yang terletak paling awal dan paling akhir pada string akan dihapus
      */
     private double extractNumber(String str) {
         str = str.replace('(', ' ');
@@ -68,23 +67,27 @@ public class Process {
         return Double.parseDouble(str);
     }
 
-    /**
-     * Creates new tree.
-     *
-     * @param expression Expression to be traversed to make an appropriate tree.
+    /* Membuat tree baru dengan operator sebagai rootnya
+     * ekspresi matematika di validasi oleh method getValidSubstring dengan cara menghapus tanda kurung pada ekspresi matematika.
+     * index berisi posisi operator yang didapatkan dari method getOperator.
+     * jika operator adalah unary operator maka anak kanan akan null
+     * tree akan terbentuk dengan operator sebagai root dan operand sebagai anak kiri.
+     * jika operator bukan unary maka anak kiri dan anak kanan akan terisi
+     * dengan leftExpression berisi ekspresi sebelum operator dan rightExpression berisi ekspresi sesudah operator.
+     * tree akan terbentuk dengan operator sebagai root, leftExpression sebagai anak kiri, dan rightExpression berisi anak kanan.
      */
     private void makeTree(String expression) {
         expression = getValidSubstring(expression);
         int index = getOperator(expression);
-        if (index == -1) {
-            // There are no operators. The expression is a single value.
+        if (index == -1) 
+            /* jika index berisi -1 artinya tidak ada operator, hanya operand */
             double value = extractNumber(expression);
             tree = new BinaryTree(new Node(value, null, null));
         }
         else {
             char c = expression.charAt(index);
             if (isOther(c)) {
-                // If the operator is a other operator the node will only have one child.
+                // Jika unary operator
                 String newExpression = "";
                 if (c == SQRT || c == SIN || c == COS || c == TAN || c == PLUSMIN || c == LOG || c == LN || c == EXP) {
                     newExpression = expression.substring(index + 1, expression.length());
@@ -95,6 +98,7 @@ public class Process {
                 tree = new BinaryTree(new Node(c, getNewChild(getValidSubstring(newExpression)), null));
             }
             else {
+                //Jika binary operator
                 String leftExpression = getValidSubstring(expression.substring(0, index));
                 String rightExpression = getValidSubstring(expression.substring(index + 1, expression.length()));
                 tree = new BinaryTree(new Node(c, getNewChild(leftExpression), getNewChild(rightExpression)));
@@ -102,15 +106,12 @@ public class Process {
         }
     }
 
-    /**
-     * Returns the position of the next operator. First it checks for pluses and minuses since they
-     * are evaluated the last. Then it checks for multiplication and division and finally for unary operators.
-     *
-     * In the expression 1 - 2 + 3 the last operator is firstly returned to produce the result
-     * same as (1-2) + 3.
-     *
-     * @param str Expression on which we search for the next operator.
-     * @return Position of the operator in the given string. -1 if no operator is found.
+    /** 
+     * mengembalikan posisi operator. 
+     * operator yang ada di dalam tanda kurung tidak akan di return(akan dilewat) karena operatornya akan diproses terakhir.
+     * operator yang pertama di cek adalah plus dan minus,lalu cek perkalian, pembagian, dan pangkat, lalu operator unary.
+     * Jika operator berada dalam kurung maka tidak akan didahulukan karena derajatnya paling tinggi
+     * jika tidak ada operator maka akan mengembalikan nilai -1.
      */
     private int getOperator(String str) {
         int bracketCounter = 0;
@@ -163,8 +164,8 @@ public class Process {
 
     /**
      *
-     * @param operator Operator to check.
-     * @return True if the operator is unary operator.
+     * @param operator adalah operator yang akan di cek
+     * @return True jika operator adalah unary operator
      */
     private boolean isOther(char operator) {
         return operator == '!' || operator == '%' || operator == SQRT || 
