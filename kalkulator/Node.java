@@ -16,7 +16,6 @@ import com.sun.istack.internal.Nullable;
 
 public class Node {
     /*ATTRIBUTE*/
-    
     private Object value;
     private Node parent;
     private Node left;
