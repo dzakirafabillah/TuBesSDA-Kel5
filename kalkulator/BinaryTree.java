@@ -19,9 +19,7 @@ public class BinaryTree {
     
     private int size;
     private Node root;
-
-    /***CONSTRUCTOR***/
-    
+  
     /*
       Konstruktor dengan parameter bertipe data Node yang akan menjadi ROOT 
       dari BinaryTree 
