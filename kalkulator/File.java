@@ -58,13 +58,17 @@ public class File {
                         return;
                     }
                     st.replaceAll("v","√");
-                    Process proses = new Process(st);
-                    String result = proses.getResult();
-                    if (result.startsWith("-")) {
-                        result = result ;
-                    }
-                    /*Menuliskan ekspresi matematika dan hasil nya ke file result.txt*/
-                    out.write(st + " = " + result);  out.newLine();
+                    try{
+                        Process proses = new Process(st);
+                        String result = proses.getResult();
+                        if (result.startsWith("-")) {
+                            result = result ;
+                        }
+                        /*Menuliskan ekspresi matematika dan hasil nya ke file result.txt*/
+                        out.write(st + " = " + result);  out.newLine();
+                      }catch(Exception NumberFormatException){
+                          out.write(st + " = " + "tidak bisa di proses, Invalid Input.");  out.newLine();
+                      }
                 }
 
                 br.close();
